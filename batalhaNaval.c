@@ -39,6 +39,11 @@ int main() {
         tabuleiro[coordenadaUm][coordenadaDois] = navio [i];
         coordenadaUm++;
     }
+
+    for (int i=0, coordenadaUm = 3, coordenadaDois= 9; i<3;i++){
+        tabuleiro[coordenadaUm][coordenadaDois] = navio [i];
+        coordenadaDois--;
+    }
     
     for (int l = 0; l<10;l++){
         printf("%c ", tabela[l]);
