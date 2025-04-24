@@ -52,7 +52,7 @@ int main() {
         for(int j=0; j<10; j++){
         printf("%d ", tabuleiro[i][j]);    
         }
-        printf("\n");
+        printf("\n");}
 
     // Sugestão: Declare uma matriz bidimensional para representar o tabuleiro (Ex: int tabuleiro[5][5];).
     // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
