@@ -1,16 +1,50 @@
 #include <stdio.h>
+#define TAMANHO_TABELA 10
+#define TAMANHO_PODER 5
 
+void cone(int tabela[TAMANHO_TABELA][TAMANHO_TABELA], int comeco, int tamanho){
+    int matriz [TAMANHO_PODER][TAMANHO_PODER];
+    int centro = TAMANHO_PODER/2, altura = tamanho;
+
+    // Inicializa a matriz com zeros
+    for (int i = 0; i < TAMANHO_PODER; i++) {
+        for (int j = 0; j < TAMANHO_PODER; j++) {
+            matriz[i][j] = 0;
+            }
+        }
+    //Adiciona o cone
+    for (int i=0; i<altura; i++){
+        int inicio = centro - i;
+        int fim = centro + i;
+        
+        for(int j=inicio; j<=fim; j++){
+            matriz[i][j] = 5;
+        }
+    }
+
+    for (int i=0; i<altura; i++){
+        int inicio = centro - i;
+        int fim = centro + i;
+        
+        for(int j=inicio; j<=fim; j++){
+            tabela[i][j] = 5;
+        }
+    }
+}
 // Desafio Batalha Naval - MateCheck
 // Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
 // Siga os comentários para implementar cada parte do desafio.
 
 int main() {
     // Nível Novato - Posicionamento dos Navios
+//Iniciando as matrizes e arrays que serão usados para a exibição e funcionamento do jogo
     int tabuleiro [10][10], agua=0;
     char tabela[10] = {'A','B','C','D','E','F','G','H','I','J'};
     printf("BEM VINDO AO BATALHA NAVAL!\n");
+//PRINTF para deixar a tabela certa quando imprimir para o usuário
     printf("   ");
 
+//Imprimindo novamente as letras da tabela
     for (int l = 0; l<10;l++){
         printf("%c ", tabela[l]);
     }
@@ -34,7 +68,8 @@ int main() {
     printf("Agora vamos adicionar os navios...\n");
 
     int navio [3]={3,3,3};
-
+//Loops para os návios na vertical e horizontal.
+//Para faciliar, preferi usar um loop complexo ao invés do aninhado, uma vez que o resultado é o mesmo para o que quero fazer.
     for (int i=0, coordenadaUm = 4, coordenadaDois= 6; i<3;i++){
         tabuleiro[coordenadaUm][coordenadaDois] = navio [i];
         coordenadaUm++;
@@ -44,7 +79,20 @@ int main() {
         tabuleiro[coordenadaUm][coordenadaDois] = navio [i];
         coordenadaDois--;
     }
+//Loops para os Navios em diagonal
+    for (int i=0, coordenadaUm = 7, coordenadaDois= 0; i<3;i++){
+        tabuleiro[coordenadaUm][coordenadaDois] = navio [i];
+        coordenadaDois++, coordenadaUm++;
+    }
+        for (int i=0, coordenadaUm = 5, coordenadaDois= 5; i<3;i++){
+            tabuleiro[coordenadaUm][coordenadaDois] = navio [i];
+            coordenadaDois--, coordenadaUm--;
+    }
+cone(tabuleiro, 6, 3);    
+//PRINTF para deixar a tabela certa quando imprimir para o usuário
+    printf("   ");
     
+//Imprimindo novamente as letras da tabela
     for (int l = 0; l<10;l++){
         printf("%c ", tabela[l]);
     }
