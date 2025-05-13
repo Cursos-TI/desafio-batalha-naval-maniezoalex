@@ -1,141 +1,140 @@
 #include <stdio.h>
 #define TAMANHO_TABELA 10
 #define TAMANHO_PODER 5
+void cone(int tabuleiro[TAMANHO_TABELA][TAMANHO_TABELA], int colunaBase, int alturadoCone){
+    for (int i = 0; i < alturadoCone; i++) {
+        int linha = i;
+        int inicio = colunaBase - i;
+        int fim = colunaBase + i;
 
-void cone(int tabela[TAMANHO_TABELA][TAMANHO_TABELA], int comeco, int tamanho){
-    int matriz [TAMANHO_PODER][TAMANHO_PODER];
-    int centro = TAMANHO_PODER/2, altura = tamanho;
+        // Verifica se a linha está dentro do tabuleiro
+        if (linha >= TAMANHO_TABELA) break;
 
-    // Inicializa a matriz com zeros
-    for (int i = 0; i < TAMANHO_PODER; i++) {
-        for (int j = 0; j < TAMANHO_PODER; j++) {
-            matriz[i][j] = 0;
+        for (int j = inicio; j <= fim; j++) {
+            // Verifica se a coluna está dentro do tabuleiro
+            if (j >= 0 && j < TAMANHO_TABELA) {
+                tabuleiro[linha][j] = 5;
             }
-        }
-    //Adiciona o cone
-    for (int i=0; i<altura; i++){
-        int inicio = centro - i;
-        int fim = centro + i;
-        
-        for(int j=inicio; j<=fim; j++){
-            matriz[i][j] = 5;
         }
     }
 
-    for (int i=0; i<altura; i++){
-        int inicio = centro - i;
-        int fim = centro + i;
-        
-        for(int j=inicio; j<=fim; j++){
-            tabela[i][j] = 5;
+}
+
+void cruz(int tabuleiro[TAMANHO_TABELA][TAMANHO_TABELA], int centroX, int centroY) {
+    // Verifica se o centro está dentro do tabuleiro
+    if (centroX < 0 || centroX >= TAMANHO_TABELA || centroY < 0 || centroY >= TAMANHO_TABELA) return;
+
+    // Desenha a linha central (horizontal)
+    for (int i = -1; i <= 1; i++) {
+        if (centroY + i >= 0 && centroY + i < TAMANHO_TABELA) {
+            tabuleiro[centroY + i][centroX] = 9;  // Linha vertical
+        }
+        if (centroX + i >= 0 && centroX + i < TAMANHO_TABELA) {
+            tabuleiro[centroY][centroX + i] = 9;  // Linha horizontal
         }
     }
 }
-// Desafio Batalha Naval - MateCheck
-// Este código inicial serve como base para o desenvolvimento do sistema de Batalha Naval.
-// Siga os comentários para implementar cada parte do desafio.
 
-int main() {
-    // Nível Novato - Posicionamento dos Navios
-//Iniciando as matrizes e arrays que serão usados para a exibição e funcionamento do jogo
-    int tabuleiro [10][10], agua=0;
-    char tabela[10] = {'A','B','C','D','E','F','G','H','I','J'};
-    printf("BEM VINDO AO BATALHA NAVAL!\n");
-//PRINTF para deixar a tabela certa quando imprimir para o usuário
+void losango(int tabuleiro[TAMANHO_TABELA][TAMANHO_TABELA], int centroX, int centroY) {
+    // Verifica se o centro está dentro do tabuleiro
+    if (centroX < 0 || centroX >= TAMANHO_TABELA || centroY < 0 || centroY >= TAMANHO_TABELA) return;
+
+    // Desenha a forma de losango (máximo 3x3)
+    for (int i = -1; i <= 1; i++) {
+        int linha = centroY + i;
+        if (linha < 0 || linha >= TAMANHO_TABELA) continue;
+
+        int colInicio = centroX - (1 - abs(i)); // Para o efeito de losango
+        int colFim = centroX + (1 - abs(i));
+
+        if (colInicio >= 0 && colInicio < TAMANHO_TABELA) {
+            tabuleiro[linha][colInicio] = 5;
+        }
+        if (colFim >= 0 && colFim < TAMANHO_TABELA) {
+            tabuleiro[linha][colFim] = 5;
+        }
+    }
+}
+
+void imprimirTabela(int tabuleiro [TAMANHO_TABELA][TAMANHO_TABELA]){
+    char letras[10] = {'A','B','C','D','E','F','G','H','I','J'};
     printf("   ");
-
-//Imprimindo novamente as letras da tabela
     for (int l = 0; l<10;l++){
-        printf("%c ", tabela[l]);
+        printf("%c ", letras[l]);
     }
     printf("\n");
-
 
     for (int i=0; i<10; i++){
         
         printf("%2d ", i+1);
         for(int j=0; j<10; j++){
-        tabuleiro [i][j]= agua;
         printf("%d ", tabuleiro[i][j]);    
         }
         printf("\n");
+    }
 
-        
-        
-    };
-//Introduzir os navios
-    printf("\n\n");
-    printf("Agora vamos adicionar os navios...\n");
+}
 
+void navioReto(int tabuleiro [TAMANHO_TABELA][TAMANHO_TABELA], int coordenadaUm, int coordenadaDois){
     int navio [3]={3,3,3};
-//Loops para os návios na vertical e horizontal.
-//Para faciliar, preferi usar um loop complexo ao invés do aninhado, uma vez que o resultado é o mesmo para o que quero fazer.
-    for (int i=0, coordenadaUm = 4, coordenadaDois= 6; i<3;i++){
+    //inicia o navio
+
+    if (coordenadaUm + 2 >= TAMANHO_TABELA) {
+        printf("Erro: navio reto ultrapassa o limite do tabuleiro!\n");
+        return;
+    }
+    //verifica se o navio não passou do limite da tabela
+
+    for (int i=0; i<3;i++){
         tabuleiro[coordenadaUm][coordenadaDois] = navio [i];
         coordenadaUm++;
-    }
-
-    for (int i=0, coordenadaUm = 3, coordenadaDois= 9; i<3;i++){
-        tabuleiro[coordenadaUm][coordenadaDois] = navio [i];
-        coordenadaDois--;
-    }
-//Loops para os Navios em diagonal
-    for (int i=0, coordenadaUm = 7, coordenadaDois= 0; i<3;i++){
-        tabuleiro[coordenadaUm][coordenadaDois] = navio [i];
-        coordenadaDois++, coordenadaUm++;
-    }
-        for (int i=0, coordenadaUm = 5, coordenadaDois= 5; i<3;i++){
-            tabuleiro[coordenadaUm][coordenadaDois] = navio [i];
-            coordenadaDois--, coordenadaUm--;
-    }
-cone(tabuleiro, 6, 3);    
-//PRINTF para deixar a tabela certa quando imprimir para o usuário
-    printf("   ");
+    }//aplica o navio
+}
+void navioDiagonal(int tabuleiro [TAMANHO_TABELA][TAMANHO_TABELA], int coordenadaUm, int coordenadaDois){
+    int navio [3]={3,3,3};
     
-//Imprimindo novamente as letras da tabela
-    for (int l = 0; l<10;l++){
-        printf("%c ", tabela[l]);
-    }
-    printf("\n");
+    if (coordenadaUm + 2 >= TAMANHO_TABELA || coordenadaDois + 2 >= TAMANHO_TABELA) {
+        printf("Erro: navio diagonal ultrapassa o limite do tabuleiro!\n");
+        return;
+    }//verifica se o navio não passou do limite da tabela
+
+    for (int i=0; i<3;i++){
+        tabuleiro[coordenadaUm][coordenadaDois] = navio [i];
+        coordenadaUm++,coordenadaDois++;
+    }//aplica o navio
+}
 
 
-    for (int i=0; i<10; i++){
-        
-        printf("%2d ", i+1);
-        for(int j=0; j<10; j++){
-        printf("%d ", tabuleiro[i][j]);    
+int main() {
+
+//Iniciando as matrizes e arrays que serão usados para a exibição e funcionamento do jogo
+    int tabuleiro [TAMANHO_TABELA][TAMANHO_TABELA];
+
+    for (int i=0; i<TAMANHO_TABELA; i++){
+        for (int j=0; j<TAMANHO_TABELA; j++){
+            tabuleiro [i][j]=0;
         }
-        printf("\n");}
+    }
 
-    // Sugestão: Declare uma matriz bidimensional para representar o tabuleiro (Ex: int tabuleiro[5][5];).
-    // Sugestão: Posicione dois navios no tabuleiro, um verticalmente e outro horizontalmente.
-    // Sugestão: Utilize `printf` para exibir as coordenadas de cada parte dos navios.
 
-    // Nível Aventureiro - Expansão do Tabuleiro e Posicionamento Diagonal
-    // Sugestão: Expanda o tabuleiro para uma matriz 10x10.
-    // Sugestão: Posicione quatro navios no tabuleiro, incluindo dois na diagonal.
-    // Sugestão: Exiba o tabuleiro completo no console, mostrando 0 para posições vazias e 3 para posições ocupadas.
-
-    // Nível Mestre - Habilidades Especiais com Matrizes
-    // Sugestão: Crie matrizes para representar habilidades especiais como cone, cruz, e octaedro.
-    // Sugestão: Utilize estruturas de repetição aninhadas para preencher as áreas afetadas por essas habilidades no tabuleiro.
-    // Sugestão: Exiba o tabuleiro com as áreas afetadas, utilizando 0 para áreas não afetadas e 1 para áreas atingidas.
-
-    // Exemplos de exibição das habilidades:
-    // Exemplo para habilidade em cone:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 1 1 1 1 1
     
-    // Exemplo para habilidade em octaedro:
-    // 0 0 1 0 0
-    // 0 1 1 1 0
-    // 0 0 1 0 0
+    printf("BEM VINDO AO BATALHA NAVAL!\n");
+imprimirTabela(tabuleiro);
+navioReto(tabuleiro,4,4);
+//iniciando o navio e imprimindo a primeira função
+    printf("\nVamos adicionar um návio reto\n");
+imprimirTabela(tabuleiro);
+//imprimindo segunda função
+    printf("\nVamos adicionar um navio diagonal\n");
+navioDiagonal(tabuleiro,3,6);
+imprimirTabela(tabuleiro);
+//finalizando com os poderes especiais
+printf("\nVamos adicionar um cone, uma cruz e um losango!\n");
+cone(tabuleiro,5,3);
+cruz(tabuleiro,3,7);
+losango(tabuleiro,7,7);
+imprimirTabela(tabuleiro);
 
-    // Exemplo para habilidade em cruz:
-    // 0 0 1 0 0
-    // 1 1 1 1 1
-    // 0 0 1 0 0
 
     return 0;
 }
